@@ -21,7 +21,7 @@
 
 		var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
 			cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
-			cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttribution}),
+			cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttribution, opacity: 0.7}),
 			latlng = new L.LatLng(50.5, 30.51);
 
 		var map = new L.Map('map', {center: latlng, zoom: 15, layers: [cloudmade]});
@@ -30,6 +30,16 @@
 		map.addLayer(marker);
 
 		marker.bindPopup("<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p><p>Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.</p>");
+
+		var showing = true;
+		setTimeout(function() {
+
+			setInterval(function() {
+				marker.setOpacity(showing ? 0.5 : 1);
+				cloudmade.setOpacity(showing ? 0.5 : 1);
+				showing = !showing;
+			}, 1000);
+		}, 4000);
 	</script>
 </body>
 </html>
