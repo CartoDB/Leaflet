@@ -29,6 +29,7 @@ L.DomUtil = {
 		    left = 0,
 		    el = element,
 		    docBody = document.body,
+		    docEl = document.documentElement,
 		    pos,
 		    ie7 = L.Browser.ie7;
 
@@ -45,8 +46,8 @@ L.DomUtil = {
 			if (el.offsetParent === docBody && pos === 'absolute') { break; }
 
 			if (pos === 'fixed') {
-				top  += docBody.scrollTop  || 0;
-				left += docBody.scrollLeft || 0;
+				top  += docBody.scrollTop  || docEl.scrollTop  || 0;
+				left += docBody.scrollLeft || docEl.scrollLeft || 0;
 				break;
 			}
 			el = el.offsetParent;
@@ -151,7 +152,12 @@ L.DomUtil = {
 			    filterName = 'DXImageTransform.Microsoft.Alpha';
 
 			// filters collection throws an error if we try to retrieve a filter that doesn't exist
-			try { filter = el.filters.item(filterName); } catch (e) {}
+			try {
+				filter = el.filters.item(filterName);
+			} catch (e) {
+				//Don't set opacity to 1 if we haven't already set an opacity, it isn't needed and breaks transparent pngs.
+				if (value === 1) { return; }
+			}
 
 			value = Math.round(value * 100);
 

@@ -2,12 +2,13 @@
 	"name": "Leaflet",
 	"version": "0.6.0",
 	"description": "JavaScript library for mobile-friendly interactive maps",
-	"dependencies": {
+	"devDependencies": {
 		"jshint": "~0.9.1",
 		"testacular": "latest",
 		"uglify-js": "~2.2.3",
 		"jake": "latest"
 	},
+	"main": "dist/leaflet.js",
 	"scripts": {
 		"test": "node ./node_modules/jake/bin/cli test"
 	},
