@@ -1,5 +1,5 @@
 /* @preserve
- * Leaflet 1.3.1, a JS library for interactive maps. http://leafletjs.com
+ * Leaflet 1.3.1-carto1, a JS library for interactive maps. http://leafletjs.com
  * (c) 2010-2017 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
 
@@ -9,7 +9,7 @@
 	(factory((global.L = {})));
 }(this, (function (exports) { 'use strict';
 
-var version = "1.3.1";
+var version = "1.3.1-carto1";
 
 /*
  * @namespace Util
@@ -2731,8 +2731,14 @@ function testProp(props) {
 function setTransform(el, offset, scale) {
 	var pos = offset || new Point(0, 0);
 
-	el.style[TRANSFORM] =
-		(ie3d ?
+	el.style.willChange = scale !== 1 ? 'auto' : 'transform';
+	el.style[L.DomUtil.TRANSFORM] =
+		// Based on https://github.com/Leaflet/Leaflet/pull/5354:
+		// We don't want to use `translate3d` for webkit since it causes the
+		// white lines issue (tile's gaps) while panning or zooming:
+		// https://bugs.chromium.org/p/chromium/issues/detail?id=600120#c15
+		// This issue does not appear on mobile devices.
+		(!mobile && (ie3d || webkit3d) ?
 			'translate(' + pos.x + 'px,' + pos.y + 'px)' :
 			'translate3d(' + pos.x + 'px,' + pos.y + 'px,0)') +
 		(scale ? ' scale(' + scale + ')' : '');
